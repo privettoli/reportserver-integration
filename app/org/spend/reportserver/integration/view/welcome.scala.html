@@ -1,0 +1,33 @@
+@import org.spend.reportserver.integration.controller.WelcomeController.FLASH_KEY_MESSAGE
+@()
+@moreScripts = {
+    <script src='@routes.Assets.at("scripts/welcome.js")' type="text/javascript" charset="utf-8"></script>
+}
+
+@main("Check out new reportserver", moreScripts) {
+    <!-- Urls for Ajax requests -->
+    <input id="export-url" type="hidden" value="@org.spend.reportserver.integration.controller.routes.WelcomeController.export(99, "format")"/>
+    <input id="supported-formats-url" type="hidden" value="@org.spend.reportserver.integration.controller.routes.WelcomeController.supportedFormats()"/>
+
+    <!-- Page -->
+    <div class="row">
+        <form>
+            <div class="field four_up columns">
+                <input id="report-id" type="number" class="input" placeholder="Type id of report"/>
+            </div>
+            <div class="field picker">
+                <select id="formats">
+                    <option value="#" disabled>Format…</option>
+                </select>
+            </div>
+            <div id="export-button" class="field pretty medium default btn"><a href="#">
+                Export</a></div>
+        </form>
+    </div>
+    <div class="row message">
+        @if(flash.contains(FLASH_KEY_MESSAGE)) {
+            <div id="flash-message" class="danger alert">@flash.get(FLASH_KEY_MESSAGE)</div>
+        }
+        <div id="ajax-message" class="danger alert hide"></div>
+    </div>
+}
