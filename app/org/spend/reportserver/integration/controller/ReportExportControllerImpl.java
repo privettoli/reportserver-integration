@@ -1,10 +1,11 @@
 package org.spend.reportserver.integration.controller;
 
 
-import org.spend.reportserver.integration.external.ws.reportserver.ReportExportService;
+import org.spend.reportserver.integration.service.ReportExportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import play.libs.F.Promise;
+import play.libs.Json;
 import play.mvc.Result;
 import play.mvc.Results;
 
@@ -13,7 +14,7 @@ import static play.libs.F.Promise.pure;
 import static play.libs.Json.toJson;
 
 @Controller
-public class WelcomeControllerImpl extends play.mvc.Controller implements WelcomeController {
+public class ReportExportControllerImpl extends play.mvc.Controller implements ReportExportController {
 
     @Autowired
     private ReportExportService reportExportService;
@@ -29,15 +30,14 @@ public class WelcomeControllerImpl extends play.mvc.Controller implements Welcom
     }
 
     @Override
-    public Promise<Result> export(Integer id, String exportFormat) {
-        if (id < 0) {
-            flash(FLASH_KEY_MESSAGE, "Incorrect id");
+    public Promise<Result> export(final Integer id, final String exportFormat) {
+        if (!reportExportService.getSupportedFormats().contains(exportFormat)) {
+            flash(FLASH_KEY_MESSAGE, format("Format %s is not supported", exportFormat));
             return pure(redirect("/"));
         }
-        if (exportFormat.equals("xlsx")) {
-            exportFormat = "excel";
-        } else if (!reportExportService.getSupportedFormats().contains(exportFormat)) {
-            flash(FLASH_KEY_MESSAGE, format("Format %s is not supported", exportFormat));
+
+        if (!reportExportService.exist(id).get(15)) {
+            flash(FLASH_KEY_MESSAGE, "Incorrect id");
             return pure(redirect("/"));
         }
         try {
@@ -46,5 +46,12 @@ public class WelcomeControllerImpl extends play.mvc.Controller implements Welcom
             flash(FLASH_KEY_MESSAGE, "Service temporary unavailable");
             return pure(redirect("/"));
         }
+    }
+
+    @Override
+    public Promise<Result> list() {
+        return reportExportService.list()
+                .map(Json::toJson)
+                .map(Results::ok);
     }
 }

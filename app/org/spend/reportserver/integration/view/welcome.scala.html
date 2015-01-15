@@ -1,4 +1,4 @@
-@import org.spend.reportserver.integration.controller.WelcomeController.FLASH_KEY_MESSAGE
+@import org.spend.reportserver.integration.controller.ReportExportController.FLASH_KEY_MESSAGE
 @()
 @moreScripts = {
     <script src='@routes.Assets.at("scripts/welcome.js")' type="text/javascript" charset="utf-8"></script>
@@ -6,10 +6,24 @@
 
 @main("Check out new reportserver", moreScripts) {
     <!-- Urls for Ajax requests -->
-    <input id="export-url" type="hidden" value="@org.spend.reportserver.integration.controller.routes.WelcomeController.export(99, "format")"/>
-    <input id="supported-formats-url" type="hidden" value="@org.spend.reportserver.integration.controller.routes.WelcomeController.supportedFormats()"/>
+    <input id="export-url" type="hidden" value="@org.spend.reportserver.integration.controller.routes.ReportExportController.export(99, "format")"/>
+    <input id="supported-formats-url" type="hidden" value="@org.spend.reportserver.integration.controller.routes.ReportExportController.supportedFormats()"/>
+    <input id="list-url" type="hidden" value="@org.spend.reportserver.integration.controller.routes.ReportExportController.list()"/>
 
     <!-- Page -->
+    <div class="row">
+        <table  class="rounded">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Keys</th>
+                </tr>
+            </thead>
+            <tbody id="list-table-body">
+            </tbody>
+        </table>
+    </div>
     <div class="row">
         <form>
             <div class="field four_up columns">

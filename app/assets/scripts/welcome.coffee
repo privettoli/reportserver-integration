@@ -14,6 +14,16 @@ $(document).ready ->
     formatsSelect.val(formats[0])
     null
 
+  $.get $("#list-url").val(), (reports) ->
+    listTable = $("#list-table-body");
+    for report in reports
+      newTr = $("<tr>")
+      newTr.append($("<td>").text(report.id))
+      newTr.append($("<td>").text(report.name))
+      newTr.append($("<td>").text(report.key))
+      listTable.append(newTr)
+    null
+
   $("#export-button").click ->
     id = reportIdInput.val()
     format = formatsSelect.find(":selected").text();

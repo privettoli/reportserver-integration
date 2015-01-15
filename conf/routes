@@ -3,11 +3,12 @@
 # ~~~~
 
 # Pages
-GET        /                                @org.spend.reportserver.integration.controller.WelcomeController.page()
+GET        /                                @org.spend.reportserver.integration.controller.ReportExportController.page()
 
 # REST services
-GET        /available_formats               @org.spend.reportserver.integration.controller.WelcomeController.supportedFormats
-GET        /export/report:id.:format        @org.spend.reportserver.integration.controller.WelcomeController.export(id: Integer, format: String)
+GET        /available_formats               @org.spend.reportserver.integration.controller.ReportExportController.supportedFormats
+GET        /export/report:id.:format        @org.spend.reportserver.integration.controller.ReportExportController.export(id: Integer, format: String)
+GET        /list                            @org.spend.reportserver.integration.controller.ReportExportController.list()
 
 # Map static resources from the /public folder to the /assets URL path
 GET        /assets/*file                    controllers.Assets.at(path="/public", file)
